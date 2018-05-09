@@ -122,15 +122,14 @@ app.post('/album', function (req, res) {
                     }
                     var album = results[0];
 
-                    return slack(res, 'Found the album.');
                     //// Get Album Tracks
-                    //spotifyApi.getAlbumTracks(album)
-                    //    .then(function (data) {
-                    //        console.log(data.body);
-                    //        return slack(res, 'Found the album bro.');
-                    //    }, function (err) {
-                    //        console.log('Something went wrong!', err);
-                    //    });                   
+                    spotifyApi.getAlbumTracks(album.id)
+                        .then(function (data) {
+                            console.log(data.body);
+                            return slack(res, 'Found the album bro.');
+                        }, function (err) {
+                            console.log('Something went wrong!', err);
+                        });                   
                 }, function (err) {
                     return slack(res, err.message);
                 });
