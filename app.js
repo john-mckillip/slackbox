@@ -124,14 +124,11 @@ app.post('/album', function (req, res) {
                     // Loop through the tracks and create the string to pass to addTracksToPlaylist
                     var trackList = '';
                     var length = tracks.length;
-                    //for (var i = 0; i < length; i++) {
-                    //    var t = 'spotify:track:' + tracks[i].id;
-                    //    if (i < length) {
-                    //        t += ',';
-                    //    }
-                    //    tracklist += t;                      
-                    //}
-                    return slack(res, 'Found the album bro. ' + tracks[0].id);
+                    tracks.forEach(track => {
+                        trackList += 'spotify:track:' + track.id;
+                    });
+                   
+                    return slack(res, 'Found the album bro. ' + tracklist);
 
                     //spotifyApi.getAlbumTracks(album.items[0].id)
                     //    .then(function (data) {
