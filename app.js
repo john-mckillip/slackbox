@@ -116,7 +116,7 @@ app.post('/album', function (req, res) {
             }
             spotifyApi.searchTracks(query)
                 .then(function (data) {
-                    var results = data.body.tracks.items;
+                    var results = data.body.albums.items;
                     if (results.length === 0) {
                         return slack(res, 'Could not find that album.');
                     }
