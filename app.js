@@ -122,9 +122,9 @@ app.post('/album', function (req, res) {
                         return slack(res, 'Sorry dudes, we could not find that album.');
                     }
                     // Loop through the tracks and create the string to pass to addTracksToPlaylist
-                    var trackList = 'shit';
+                    var trackList = '';
                     tracks.forEach(function (track) {
-                        tracklist = 'FuckYou' + track.name;
+                        tracklist = tracklist + 'spotify:track:' + track.id + ',';
                     });
                  
                     return slack(res, 'Found the album bro. ' + tracklist);
