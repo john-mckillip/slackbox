@@ -124,7 +124,7 @@ app.post('/album', function (req, res) {
                     // Loop through the tracks and create the string to pass to addTracksToPlaylist
                     var trackList = "";
                     for (var i = 0, len = tracks.length; i < len; i++) {
-                        tracklist += 'spotify:track:' + track.id;
+                        tracklist += 'spotify:track:' + tracks[i].id;
                         if (i != len) {
                             tracklist += ',';
                         }
