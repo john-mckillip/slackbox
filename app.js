@@ -115,13 +115,15 @@ app.post('/album', function (req, res) {
                 var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim() + '&type=album';
             }
             spotifyApi.searchTracks(query)
-                .then(function (data) {                    
-                    var results = data.body.albums.items;
-                    if (results.length === 0) {
-                        return slack(res, 'Could not find that album.');
-                    }
-                    var album = results[0];
-                    return slack(res, 'Found the album bro. ID: ' + album.id);
+                .then(function (data) {
+                    var result = JSON.parse(data);
+                    return slack(res, 'Result: ' + result);
+                    //var results = data.body.albums.items;
+                    //if (results.length === 0) {
+                    //    return slack(res, 'Could not find that album.');
+                    //}
+                    //var album = results[0];
+                    //return slack(res, 'Found the album bro. ID: ' + album.id);
                     // Get Album Tracks
                     //spotifyApi.getAlbumTracks(album.items[0].id)
                     //    .then(function (data) {
