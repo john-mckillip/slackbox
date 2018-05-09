@@ -125,7 +125,7 @@ app.post('/album', function (req, res) {
                     spotifyApi.getAlbumTracks(album)
                         .then(function (data) {
                             console.log(data.body);
-                            return slack(res, data);
+                            return slack(res, 'Found the album bro.');
                         }, function (err) {
                             console.log('Something went wrong!', err);
                         });                   
