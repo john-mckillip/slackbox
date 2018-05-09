@@ -125,7 +125,7 @@ app.post('/album', function (req, res) {
                     var trackList = '';
                     var length = tracks.length;
 
-                    for (var i = 0; i < length; i++) {
+                    for (var i = 0; i <= length; i++) {
                         
                         tracklist += tracks[i].id;                      
                     }
