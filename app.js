@@ -123,11 +123,11 @@ app.post('/album', function (req, res) {
                     var album = results[0];
 
                     //// Get Album Tracks
-                    spotifyApi.getAlbumTracks(album.id)
+                    spotifyApi.getAlbumTracks(album.items[0].id)
                         .then(function (data) {
                             return slack(res, 'Found the album bro.');
                         }, function (err) {
-                            return slack(res, 'Something happened bro.' + err);
+                            return slack(res, 'Something happened bro:' + err);
                         });                   
                 }, function (err) {
                     return slack(res, err.message);
