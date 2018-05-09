@@ -114,26 +114,28 @@ app.post('/album', function (req, res) {
                 var pieces = text.split(' - ');
                 var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim() + '&type=album';
             }
-            spotifyApi.searchTracks(query)
-                .then(function (data) {
-                    var result = JSON.parse(data);
-                    return slack(res, 'Result: ' + result);
-                    //var results = data.body.albums.items;
-                    //if (results.length === 0) {
-                    //    return slack(res, 'Could not find that album.');
-                    //}
-                    //var album = results[0];
-                    //return slack(res, 'Found the album bro. ID: ' + album.id);
-                    // Get Album Tracks
-                    //spotifyApi.getAlbumTracks(album.items[0].id)
-                    //    .then(function (data) {
-                    //        return slack(res, 'Found the album bro.');
-                    //    }, function (err) {
-                    //        return slack(res, 'Something happened bro:' + err);
-                    //    });                   
-                }, function (err) {
-                    return slack(res, err.message);
-                });
+
+            return slack(res, 'Query: ' + query);
+            //spotifyApi.searchTracks(query)
+            //    .then(function (data) {
+            //        var result = JSON.parse(data);
+            //        return slack(res, 'Result: ' + result);
+            //        //var results = data.body.albums.items;
+            //        //if (results.length === 0) {
+            //        //    return slack(res, 'Could not find that album.');
+            //        //}
+            //        //var album = results[0];
+            //        //return slack(res, 'Found the album bro. ID: ' + album.id);
+            //        // Get Album Tracks
+            //        //spotifyApi.getAlbumTracks(album.items[0].id)
+            //        //    .then(function (data) {
+            //        //        return slack(res, 'Found the album bro.');
+            //        //    }, function (err) {
+            //        //        return slack(res, 'Something happened bro:' + err);
+            //        //    });                   
+            //    }, function (err) {
+            //        return slack(res, err.message);
+            //    });
         }, function (err) {
             return slack(res, 'Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
         });
