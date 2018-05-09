@@ -114,8 +114,7 @@ app.post('/album', function (req, res) {
                 var pieces = text.split(' - ');
                 var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim();
             }
-
-            return slack(res, 'Query: ' + query);
+           
             spotifyApi.searchTracks(query, { type: album })
                 .then(function (data) {
                     var result = JSON.parse(data);
