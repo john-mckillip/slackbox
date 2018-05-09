@@ -127,7 +127,7 @@ app.post('/album', function (req, res) {
 
                     for (var i = 0; i <= length; i++) {
                         
-                        tracklist += tracks[i].id;                      
+                        tracklist += 'Fuck You!';                      
                     }
                     return slack(res, 'Found the album bro. ' + tracklist);
 
