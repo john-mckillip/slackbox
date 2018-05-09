@@ -121,15 +121,15 @@ app.post('/album', function (req, res) {
                     if (tracks.length === 0) {
                         return slack(res, 'Sorry dudes, we could not find that album.');
                     }
-                    // Loop through the tracks and create the string to pass to addTracksToPlaylist
-                    var trackList = "";
-                    for (var i = 0, len = tracks.length; i < len; i++) {
-                        tracklist += 'spotify:track:' + tracks[i].id;
-                        if (i != len) {
-                            tracklist += ',';
-                        }
-                    }
-                    return slack(res, 'Found the album bro. Track List: ' + tracklist);
+                    //// Loop through the tracks and create the string to pass to addTracksToPlaylist
+                    //var trackList = "";
+                    //for (var i = 0, len = tracks.length; i < len; i++) {
+                    //    tracklist += 'spotify:track:' + tracks[i].id;
+                    //    if (i != len) {
+                    //        tracklist += ',';
+                    //    }
+                    //}
+                    return slack(res, 'Found the album bro.');
 
                     //spotifyApi.getAlbumTracks(album.items[0].id)
                     //    .then(function (data) {
