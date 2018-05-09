@@ -127,7 +127,7 @@ app.post('/album', function (req, res) {
                         .then(function (data) {
                             return slack(res, 'Found the album bro.');
                         }, function (err) {
-                            return slack(res, 'Something happened bro.');
+                            return slack(res, 'Something happened bro.' + err);
                         });                   
                 }, function (err) {
                     return slack(res, err.message);
