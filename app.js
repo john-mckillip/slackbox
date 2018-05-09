@@ -112,18 +112,17 @@ app.post('/album', function (req, res) {
                 var query = 'album:' + text;
             } else {
                 var pieces = text.split(' - ');
-                var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim();
+                var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim() + '&type=album';
             }
             spotifyApi.searchTracks(query)
-                .then(function (data) {
-                    return slack(res, 'Data: '+  data.body.tracks.items);
-                    //var results = data.body.albums.items;
-                    //if (results.length === 0) {
-                    //    return slack(res, 'Could not find that album.');
-                    //}
-                    //var album = results[0];
-                    //return slack(res, 'Found the album bro. ID: ');
-                    //// Get Album Tracks
+                .then(function (data) {                    
+                    var results = data.body.albums.items;
+                    if (results.length === 0) {
+                        return slack(res, 'Could not find that album.');
+                    }
+                    var album = results[0];
+                    return slack(res, 'Found the album bro. ID: ' + album.id);
+                    // Get Album Tracks
                     //spotifyApi.getAlbumTracks(album.items[0].id)
                     //    .then(function (data) {
                     //        return slack(res, 'Found the album bro.');
