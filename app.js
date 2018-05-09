@@ -105,7 +105,7 @@ app.post('/album', function (req, res) {
                 spotifyApi.setRefreshToken(data.body['refresh_token']);
             }
             if (req.body.text.trim().length === 0) {
-                return res.send('Enter the name of a album and the name of the artist, separated by a "-"\nExample: Blue (Da Ba Dee) - Eiffel 65');
+                return res.send('Enter the name of a artist then the name of the album, separated by a "-"\nExample: MGMT - Little Dark Age');
             }
             var text = process.env.SLACK_OUTGOING === 'true' ? req.body.text.replace(req.body.trigger_word, '') : req.body.text;
             if (text.indexOf(' - ') === -1) {
@@ -115,14 +115,21 @@ app.post('/album', function (req, res) {
                 var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim();
             }
            
-            spotifyApi.searchTracks(query, { type: album })
+            spotifyApi.searchTracks(query)
                 .then(function (data) {
-                    var results = data.body.albums.items;
-                    if (results.length === 0) {
-                        return slack(res, 'Could not find that album.');
+                    var tracks = data.body.tracks.items;
+                    if (tracks.length === 0) {
+                        return slack(res, 'Sorry dudes, we could not find that album.');
                     }
-                    var album = results[0];
-                    return slack(res, 'Found the album bro. ID: ' + album.id);
+                    // Loop through the tracks and create the string to pass to addTracksToPlaylist
+                    var trackList = "";
+                    for (var i = 0, len = tracks.length; i < len; i++) {
+                        tracklist += 'spotify:track:' + track.id;
+                        if (i != len) {
+                            tracklist += ',';
+                        }
+                    }
+                    return slack(res, 'Found the album bro. Track List: ' + tracklist);
 
                     //spotifyApi.getAlbumTracks(album.items[0].id)
                     //    .then(function (data) {
