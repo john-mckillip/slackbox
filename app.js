@@ -121,14 +121,16 @@ app.post('/album', function (req, res) {
                         return slack(res, 'Could not find that album.');
                     }
                     var album = results[0];
-                    // Get Album Tracks
-                    spotifyApi.getAlbumTracks(album)
-                        .then(function (data) {
-                            console.log(data.body);
-                            return slack(res, 'Found the album bro.');
-                        }, function (err) {
-                            console.log('Something went wrong!', err);
-                        });                   
+
+                    return slack(res, 'Found the album.');
+                    //// Get Album Tracks
+                    //spotifyApi.getAlbumTracks(album)
+                    //    .then(function (data) {
+                    //        console.log(data.body);
+                    //        return slack(res, 'Found the album bro.');
+                    //    }, function (err) {
+                    //        console.log('Something went wrong!', err);
+                    //    });                   
                 }, function (err) {
                     return slack(res, err.message);
                 });
