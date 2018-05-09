@@ -97,5 +97,45 @@ app.post('/store', function(req, res) {
     });
 });
 
+app.post('/album', function (req, res) {
+    spotifyApi.refreshAccessToken()
+        .then(function (data) {
+            spotifyApi.setAccessToken(data.body['access_token']);
+            if (data.body['refresh_token']) {
+                spotifyApi.setRefreshToken(data.body['refresh_token']);
+            }
+            if (req.body.text.trim().length === 0) {
+                return res.send('Enter the name of a album and the name of the artist, separated by a "-"\nExample: Blue (Da Ba Dee) - Eiffel 65');
+            }
+            var text = process.env.SLACK_OUTGOING === 'true' ? req.body.text.replace(req.body.trigger_word, '') : req.body.text;
+            if (text.indexOf(' - ') === -1) {
+                var query = 'album:' + text;
+            } else {
+                var pieces = text.split(' - ');
+                var query = 'artist:' + pieces[0].trim() + ' album:' + pieces[1].trim();
+            }
+            spotifyApi.searchTracks(query)
+                .then(function (data) {
+                    var results = data.body.tracks.items;
+                    if (results.length === 0) {
+                        return slack(res, 'Could not find that album.');
+                    }
+                    var album = results[0];
+                    // Get Album Tracks
+                    spotifyApi.getAlbumTracks(album)
+                        .then(function (data) {
+                            console.log(data.body);
+                            return slack(res, data);
+                        }, function (err) {
+                            console.log('Something went wrong!', err);
+                        });                   
+                }, function (err) {
+                    return slack(res, err.message);
+                });
+        }, function (err) {
+            return slack(res, 'Could not refresh access token. You probably need to re-authorise yourself from your app\'s homepage.');
+        });
+});
+
 app.set('port', (process.env.PORT || 5000));
 app.listen(app.get('port'));
