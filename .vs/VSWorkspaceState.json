@@ -1,6 +1,7 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\node_modules\\promise"
   ],
   "SelectedNode": "\\app.js",
   "PreviewInSolutionExplorer": false

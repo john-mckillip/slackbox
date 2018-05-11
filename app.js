@@ -51,14 +51,14 @@ app.get('/callback', function(req, res) {
     });
 });
 
-app.use('/store', function(req, res, next) {
+app.use('/song', function(req, res, next) {
   if (req.body.token !== process.env.SLACK_TOKEN) {
     return slack(res.status(500), 'Cross site request forgerizzle!');
   }
   next();
 });
 
-app.post('/store', function(req, res) {
+app.post('/song', function(req, res) {
   spotifyApi.refreshAccessToken()
     .then(function(data) {
       spotifyApi.setAccessToken(data.body['access_token']);
@@ -66,7 +66,7 @@ app.post('/store', function(req, res) {
         spotifyApi.setRefreshToken(data.body['refresh_token']);
       }
       if (req.body.text.trim().length === 0) {
-          return res.send('Enter the name of a song and the name of the artist, separated by a "-"\nExample: Blue (Da Ba Dee) - Eiffel 65');
+          return res.send('Enter the name of a song and the name of the artist, separated by a "-"\nExample: M.C. Hammer - Can\'t Touch This');
       }
       var text = process.env.SLACK_OUTGOING === 'true' ? req.body.text.replace(req.body.trigger_word, '') : req.body.text;
       if(text.indexOf(' - ') === -1) {
@@ -122,21 +122,24 @@ app.post('/album', function (req, res) {
                         return slack(res, 'Sorry dudes, we could not find that album.');
                     }
                     // Loop through the tracks and create the string to pass to addTracksToPlaylist
-                    var trackList = new Array();
-                    console.log('Test');
+                    var trackList = '';
+                    var size = tracks.length;
+                    var count = 1;
                     tracks.forEach(function (track) {
-                        track = 'spotify:track:' + track.id + ',';
-                        //tracklist.push(track);
+                        var separator = (count === size) ? '' : ',';
+                        track = 'spotify:track:' + track.id + separator;
+                        trackList += track;
+                        count++;
                     });
-                 
-                    return slack(res, 'Found the album bro. ' + tracklist.length);
-
-                    //spotifyApi.getAlbumTracks(album.items[0].id)
-                    //    .then(function (data) {
-                    //        return slack(res, 'Found the album bro.');
-                    //    }, function (err) {
-                    //        return slack(res, 'Something happened bro:' + err);
-                    //    });                   
+                    var album = data.body.tracks.items[0].album.name;
+                    var artist = data.body.tracks.items[0].artists[0].name;
+                    spotifyApi.addTracksToPlaylist(process.env.SPOTIFY_USERNAME, process.env.SPOTIFY_PLAYLIST_ID, [trackList])
+                        .then(function (data) {
+                            var message = 'Album added: ' + (process.env.SLACK_OUTGOING === 'true' ? ' by *' + req.body.user_name + '*' : '') + ': *' + album + '* by *' + artist + '*'
+                            return slack(res, message);
+                        }, function (err) {
+                            return slack(res, err.message);
+                        });                                      
                 }, function (err) {
                     return slack(res, err.message);
                 });
